@@ -54,7 +54,7 @@ Una aplicación web moderna para crear, visualizar y editar diagramas de arquite
     Abre http://localhost:8080 en tu navegador.
     ```
 
-🐳 Despliegue con Docker
+## 🐳 Despliegue con Docker
 1. Construye la imagen:
     ```sh
     docker build -t infradraw-frontend .
@@ -63,7 +63,7 @@ Una aplicación web moderna para crear, visualizar y editar diagramas de arquite
     ```sh
     docker run -p 8080:8080 infradraw-frontend
     ```
-📁 Estructura del proyecto
+## 📁 Estructura del proyecto
 
     ```sh
     frontend/
@@ -79,13 +79,18 @@ Una aplicación web moderna para crear, visualizar y editar diagramas de arquite
     ├── Dockerfile
     └── ...
     ```
-🤝 **Contribuciones**
+## 🤝 Contribuciones
 
 ¡Las contribuciones son bienvenidas!
 Por favor, abre un issue o pull request para sugerir mejoras, reportar bugs o proponer nuevas funcionalidades.
 
-📄 **Licencia**
+## 📄 Licencia
 
-Este proyecto está bajo la licencia MIT.
+Este proyecto está bajo la licencia MIT. Consulta el archivo [LICENSE.md](LICENSE.md) para más detalles.
+---
 
-*¡Crea diagramas increíbles y comparte tus arquitecturas con el mundo!*
+¡Crea diagramas increíbles y comparte tus arquitecturas con el mundo!
+---
+
+¡Contribuciones y sugerencias son bienvenidas! ⭐  
+¿Dudas? Abre un issue o contacta a [Paulo Ariel Pareja](mailto:info@paulopareja.com.ar)
