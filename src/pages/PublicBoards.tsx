@@ -93,7 +93,7 @@ const PublicBoards: React.FC = () => {
           <div className="flex items-start space-x-3">
             <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
             <div className="text-sm text-blue-800">
-              <p className="font-medium mb-1">¡Bienvenido a DiagramArch!</p>
+              <p className="font-medium mb-1">¡Bienvenido a InfraDraw!</p>
               <p>
                 Aquí puedes explorar diagramas de arquitectura compartidos públicamente. 
                 Para crear tus propios diagramas y acceder a todas las funcionalidades, 

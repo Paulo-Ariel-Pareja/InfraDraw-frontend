@@ -37,7 +37,7 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
             <div className="flex items-center space-x-8">
               <Link to={user ? "/" : "/public"}>
                 <h1 className="text-xl font-bold text-primary cursor-pointer">
-                  DiagramArch
+                  InfraDraw
                 </h1>
               </Link>
               
