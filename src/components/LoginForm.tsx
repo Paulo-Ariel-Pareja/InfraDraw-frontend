@@ -1,31 +1,33 @@
+import React, { useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Loader2, Lock } from "lucide-react";
 
-import React, { useState } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Label } from '@/components/ui/label';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Loader2, Lock } from 'lucide-react';
+const superUser = import.meta.env.VITE_USER_ADMIN;
+const superPass = import.meta.env.VITE_USER_PASSWORD;
 
 const LoginForm: React.FC = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const { login, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!username || !password) {
-      setError('Por favor, complete todos los campos');
+      setError("Por favor, complete todos los campos");
       return;
     }
 
     const success = await login(username, password);
     if (!success) {
-      setError('Credenciales incorrectas. Use admin/admin123 para probar.');
+      setError("Credenciales incorrectas. Use admin/admin123 para probar.");
     }
   };
 
@@ -56,7 +58,7 @@ const LoginForm: React.FC = () => {
                 disabled={isLoading}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="password">Contraseña</Label>
               <Input
@@ -75,24 +77,29 @@ const LoginForm: React.FC = () => {
               </Alert>
             )}
 
-            <Button 
-              type="submit" 
-              className="w-full" 
-              disabled={isLoading}
-            >
+            <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Ingresando...
                 </>
               ) : (
-                'Ingresar'
+                "Ingresar"
               )}
             </Button>
           </form>
 
           <div className="mt-4 p-3 bg-blue-50 rounded-md">
+            <p className="text-xs text-blue-600">
+              <strong>Credenciales de prueba:</strong>
+              <br />
+              Usuario: {superUser}
+              <br />
+              Contraseña: {superPass}
+            </p>
           </div>
+
+          <div className="mt-4 p-3 bg-blue-50 rounded-md"></div>
         </CardContent>
       </Card>
     </div>
