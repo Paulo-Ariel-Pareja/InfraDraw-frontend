@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Layout from "@/components/Layout";
+import PublicLayout from '@/components/PublicLayout';
 import LoginForm from "@/components/LoginForm";
 import Dashboard from "@/pages/Dashboard";
 import Components from "@/pages/Components";
@@ -81,14 +82,12 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
-      <Route
-        path="/public"
-        element={
-          <ProtectedRoute>
-            <PublicBoards />
-          </ProtectedRoute>
-        }
-      />
+      {/* Ruta pública para tableros públicos */}
+      <Route path="/public" element={
+        <PublicLayout>
+          <PublicBoards />
+        </PublicLayout>
+      } />
       <Route
         path="/users"
         element={

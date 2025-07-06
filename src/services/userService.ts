@@ -104,28 +104,23 @@ export const userService = {
       };
     }
 
-    try {
-      const queryParams = new URLSearchParams();
-      queryParams.append("page", page.toString());
-      queryParams.append("limit", limit.toString());
-      if (search) queryParams.append("search", search);
+    const queryParams = new URLSearchParams();
+    queryParams.append("page", page.toString());
+    queryParams.append("limit", limit.toString());
+    if (search) queryParams.append("search", search);
 
-      const response = await fetch(`${baseUrl}/user?${queryParams}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/user?${queryParams}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async createUser(
@@ -140,30 +135,24 @@ export const userService = {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      // No incluir password en la respuesta
       const { password, ...userResponse } = newUser;
       mockUsers.push(userResponse);
       console.log("User created:", userResponse);
       return userResponse;
     }
-    try {
-      const response = await fetch(`${baseUrl}/user`, {
-        method: "POST",
-        body: JSON.stringify(userData),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error creating user:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/user`, {
+      method: "POST",
+      body: JSON.stringify(userData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async deleteUser(id: string, token: string): Promise<boolean> {
@@ -175,21 +164,16 @@ export const userService = {
       mockUsers.splice(index, 1);
       return true;
     }
-    try {
-      const response = await fetch(`${baseUrl}/user/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      return true;
-    } catch (error) {
-      console.error("Error deleting user:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/user/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    return true;
   },
 };

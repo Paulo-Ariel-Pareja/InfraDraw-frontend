@@ -1,27 +1,40 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Board } from '@/types';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { Board } from "@/types";
 import { useAuth } from "@/contexts/AuthContext";
-import { boardService, BoardsParams } from '@/services/boardService';
+import { boardService, BoardsParams } from "@/services/boardService";
 
 export const useBoards = (params: BoardsParams = {}) => {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
-  const {
-    data,
-    isLoading,
-    error,
-    refetch
-  } = useQuery({
-    queryKey: ['boards', params],
-    queryFn: () => boardService.getAllBoards(params, user.token),
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["boards", params],
+    queryFn: async () => {
+      try {
+        return await boardService.getAllBoards(params, user.token);
+      } catch (err: any) {
+        if (err.message === "401" || err.message === "403") {
+          logout();
+          navigate("/");
+        }
+        throw err;
+      }
+    },
   });
 
   const createBoardMutation = useMutation({
     mutationFn: (boardData: Omit<Board, "id" | "createdAt" | "updatedAt">) =>
       boardService.createBoard(boardData, user.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['boards'] });
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
+    },
+    onError: (error) => {
+      if (error.message === "401" || error.message === "403") {
+        logout();
+        navigate("/");
+      }
     },
   });
 
@@ -29,22 +42,41 @@ export const useBoards = (params: BoardsParams = {}) => {
     mutationFn: ({ id, updates }: { id: string; updates: Partial<Board> }) =>
       boardService.updateBoard(id, updates, user.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['boards'] });
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
+    },
+    onError: (error) => {
+      if (error.message === "401" || error.message === "403") {
+        logout();
+        navigate("/");
+      }
     },
   });
 
   const deleteBoardMutation = useMutation({
     mutationFn: (id: string) => boardService.deleteBoard(id, user.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['boards'] });
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
+    },
+    onError: (error) => {
+      if (error.message === "401" || error.message === "403") {
+        logout();
+        navigate("/");
+      }
     },
   });
 
   const toggleVisibilityMutation = useMutation({
-    mutationFn: (id: string) => boardService.toggleBoardVisibility(id, user.token),
+    mutationFn: (id: string) =>
+      boardService.toggleBoardVisibility(id, user.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['boards'] });
-      queryClient.invalidateQueries({ queryKey: ['publicBoards'] });
+      queryClient.invalidateQueries({ queryKey: ["boards"] });
+      queryClient.invalidateQueries({ queryKey: ["publicBoards"] });
+    },
+    onError: (error) => {
+      if (error.message === "401" || error.message === "403") {
+        logout();
+        navigate("/");
+      }
     },
   });
 
@@ -69,13 +101,8 @@ export const useBoards = (params: BoardsParams = {}) => {
 };
 
 export const usePublicBoards = (params: BoardsParams = {}) => {
-  const {
-    data,
-    isLoading,
-    error,
-    refetch
-  } = useQuery({
-    queryKey: ['publicBoards', params],
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["publicBoards", params],
     queryFn: () => boardService.getPublicBoards(params),
   });
 
@@ -87,7 +114,7 @@ export const usePublicBoards = (params: BoardsParams = {}) => {
     totalPages: data?.totalPages || 0,
     isLoading,
     error,
-    refetch
+    refetch,
   };
 };
 
@@ -95,9 +122,9 @@ export const useBoard = (id: string) => {
   const {
     data: board,
     isLoading,
-    error
+    error,
   } = useQuery({
-    queryKey: ['board', id],
+    queryKey: ["board", id],
     queryFn: () => boardService.getBoardById(id),
     enabled: !!id,
   });
@@ -105,6 +132,6 @@ export const useBoard = (id: string) => {
   return {
     board,
     isLoading,
-    error
+    error,
   };
 };
