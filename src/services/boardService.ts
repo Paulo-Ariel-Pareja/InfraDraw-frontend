@@ -146,46 +146,54 @@ export interface BoardsParams {
 }
 
 export const boardService = {
-  async getAllBoards(params: BoardsParams = {}): Promise<BoardsResponse> {
-    const { page = 1, limit = 10, search = '' } = params;   
+  async getAllBoards(
+    params: BoardsParams = {},
+    token: string
+  ): Promise<BoardsResponse> {
+    const { page = 1, limit = 10, search = "" } = params;
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
-      
+
       // Filtrar por búsqueda
       let filteredBoards = [...mockBoards];
       if (search.trim()) {
         const searchLower = search.toLowerCase();
-        filteredBoards = mockBoards.filter(board =>
-          board.name.toLowerCase().includes(searchLower) ||
-          (board.description && board.description.toLowerCase().includes(searchLower))
+        filteredBoards = mockBoards.filter(
+          (board) =>
+            board.name.toLowerCase().includes(searchLower) ||
+            (board.description &&
+              board.description.toLowerCase().includes(searchLower))
         );
       }
-      
+
       // Calcular paginación
       const total = filteredBoards.length;
       const totalPages = Math.ceil(total / limit);
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
       const boards = filteredBoards.slice(startIndex, endIndex);
-      
+
       return {
         boards,
         total,
         page,
         limit,
-        totalPages
+        totalPages,
       };
     }
-    
+
     try {
       const queryParams = new URLSearchParams();
-      queryParams.append('page', page.toString());
-      queryParams.append('limit', limit.toString());
-      if (search) queryParams.append('search', search);
-      
+      queryParams.append("page", page.toString());
+      queryParams.append("limit", limit.toString());
+      if (search) queryParams.append("search", search);
+
       const response = await fetch(`${baseUrl}/board?${queryParams}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -199,46 +207,48 @@ export const boardService = {
   },
 
   async getPublicBoards(params: BoardsParams = {}): Promise<BoardsResponse> {
-    const { page = 1, limit = 10, search = '' } = params;
-    
+    const { page = 1, limit = 10, search = "" } = params;
+
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
-      
+
       // Filtrar solo tableros públicos
       let filteredBoards = mockBoards.filter((board) => board.isPublic);
-      
+
       // Filtrar por búsqueda
       if (search.trim()) {
         const searchLower = search.toLowerCase();
-        filteredBoards = filteredBoards.filter(board =>
-          board.name.toLowerCase().includes(searchLower) ||
-          (board.description && board.description.toLowerCase().includes(searchLower)) ||
-          board.createdBy.toLowerCase().includes(searchLower)
+        filteredBoards = filteredBoards.filter(
+          (board) =>
+            board.name.toLowerCase().includes(searchLower) ||
+            (board.description &&
+              board.description.toLowerCase().includes(searchLower)) ||
+            board.createdBy.toLowerCase().includes(searchLower)
         );
       }
-      
+
       // Calcular paginación
       const total = filteredBoards.length;
       const totalPages = Math.ceil(total / limit);
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
       const boards = filteredBoards.slice(startIndex, endIndex);
-      
+
       return {
         boards,
         total,
         page,
         limit,
-        totalPages
+        totalPages,
       };
     }
-    
+
     try {
       const queryParams = new URLSearchParams();
-      queryParams.append('page', page.toString());
-      queryParams.append('limit', limit.toString());
-      if (search) queryParams.append('search', search);
-      
+      queryParams.append("page", page.toString());
+      queryParams.append("limit", limit.toString());
+      if (search) queryParams.append("search", search);
+
       const response = await fetch(`${baseUrl}/board/public?${queryParams}`, {
         method: "GET",
         headers: { "Content-Type": "application/json" },
@@ -276,7 +286,8 @@ export const boardService = {
   },
 
   async createBoard(
-    boardData: Omit<Board, "id" | "createdAt" | "updatedAt">
+    boardData: Omit<Board, "id" | "createdAt" | "updatedAt">,
+    token: string
   ): Promise<Board> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
@@ -294,7 +305,10 @@ export const boardService = {
       const response = await fetch(`${baseUrl}/board`, {
         method: "POST",
         body: JSON.stringify(boardData),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -309,7 +323,8 @@ export const boardService = {
 
   async updateBoard(
     id: string,
-    updates: Partial<Board>
+    updates: Partial<Board>,
+    token: string
   ): Promise<Board | null> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
@@ -328,7 +343,10 @@ export const boardService = {
       const response = await fetch(`${baseUrl}/board/${id}`, {
         method: "PATCH",
         body: JSON.stringify(updates),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -341,7 +359,7 @@ export const boardService = {
     }
   },
 
-  async deleteBoard(id: string): Promise<boolean> {
+  async deleteBoard(id: string, token: string): Promise<boolean> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       const index = mockBoards.findIndex((board) => board.id === id);
@@ -353,7 +371,10 @@ export const boardService = {
     try {
       const response = await fetch(`${baseUrl}/board/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -365,7 +386,10 @@ export const boardService = {
     }
   },
 
-  async toggleBoardVisibility(id: string): Promise<Board | null> {
+  async toggleBoardVisibility(
+    id: string,
+    token: string
+  ): Promise<Board | null> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       const index = mockBoards.findIndex((board) => board.id === id);
@@ -381,7 +405,10 @@ export const boardService = {
     try {
       const response = await fetch(`${baseUrl}/board/${id}/toggle`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);

@@ -1,23 +1,27 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { userService, UsersParams } from "@/services/userService";
+import { useAuth } from "@/contexts/AuthContext";
+import { UserManagement } from "@/types";
 
 export const useUsers = (params: UsersParams = {}) => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["users", params],
-    queryFn: () => userService.getAllUsers(params),
+    queryFn: () => userService.getAllUsers(params, user.token),
   });
 
   const createUserMutation = useMutation({
-    mutationFn: userService.createUser,
+    mutationFn: (userData: Omit<UserManagement, "id" | "createdAt" | "updatedAt">) =>
+      userService.createUser(userData, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },
   });
 
   const deleteUserMutation = useMutation({
-    mutationFn: userService.deleteUser,
+    mutationFn: (id: string) => userService.deleteUser(id, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["users"] });
     },

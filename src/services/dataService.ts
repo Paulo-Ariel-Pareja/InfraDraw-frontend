@@ -157,47 +157,54 @@ export interface ComponentsParams {
 
 export const dataService = {
   // Get components with pagination and search
-  async getComponents(params: ComponentsParams = {}): Promise<ComponentsResponse> {
-    const { page = 1, limit = 10, search = '' } = params;
-    
+  async getComponents(
+    params: ComponentsParams = {},
+    token: string
+  ): Promise<ComponentsResponse> {
+    const { page = 1, limit = 10, search = "" } = params;
+
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
-      
+
       // Filtrar por búsqueda
       let filteredComponents = [...mockComponents];
       if (search.trim()) {
         const searchLower = search.toLowerCase();
-        filteredComponents = mockComponents.filter(component =>
-          component.name.toLowerCase().includes(searchLower) ||
-          component.technology.toLowerCase().includes(searchLower)
+        filteredComponents = mockComponents.filter(
+          (component) =>
+            component.name.toLowerCase().includes(searchLower) ||
+            component.technology.toLowerCase().includes(searchLower)
         );
       }
-      
+
       // Calcular paginación
       const total = filteredComponents.length;
       const totalPages = Math.ceil(total / limit);
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
       const components = filteredComponents.slice(startIndex, endIndex);
-      
+
       return {
         components,
         total,
         page,
         limit,
-        totalPages
+        totalPages,
       };
     }
-    
+
     try {
       const queryParams = new URLSearchParams();
-      queryParams.append('page', page.toString());
-      queryParams.append('limit', limit.toString());
-      if (search) queryParams.append('search', search);
-      
+      queryParams.append("page", page.toString());
+      queryParams.append("limit", limit.toString());
+      if (search) queryParams.append("search", search);
+
       const response = await fetch(`${baseUrl}/component?${queryParams}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -211,13 +218,13 @@ export const dataService = {
   },
 
   // Get components for editor (first page only, no pagination UI)
-  async getComponentsForEditor(search: string = ''): Promise<Component[]> {
-    const response = await this.getComponents({ page: 1, limit: 50, search });
+  async getComponentsForEditor(search: string = "", token: string): Promise<Component[]> {
+    const response = await this.getComponents({ page: 1, limit: 10, search }, token);
     return response.components;
   },
 
   // Get component by ID
-  async getComponentById(id: string): Promise<Component | null> {
+  async getComponentById(id: string, token: string): Promise<Component | null> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       return mockComponents.find((comp) => comp.id === id) || null;
@@ -225,7 +232,10 @@ export const dataService = {
     try {
       const response = await fetch(`${baseUrl}/component/${id}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -240,7 +250,8 @@ export const dataService = {
 
   // Create new component
   async createComponent(
-    componentData: Omit<Component, "id" | "createdAt" | "updatedAt">
+    componentData: Omit<Component, "id" | "createdAt" | "updatedAt">,
+    token: string
   ): Promise<Component> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
@@ -256,7 +267,10 @@ export const dataService = {
     try {
       const response = await fetch(`${baseUrl}/component`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(componentData),
       });
       if (!response.ok) {
@@ -273,7 +287,8 @@ export const dataService = {
   // Update component
   async updateComponent(
     id: string,
-    updates: Partial<Component>
+    updates: Partial<Component>,
+    token: string
   ): Promise<Component | null> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
@@ -290,7 +305,10 @@ export const dataService = {
     try {
       const response = await fetch(`${baseUrl}/component/${id}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify(updates),
       });
       if (!response.ok) {
@@ -305,7 +323,7 @@ export const dataService = {
   },
 
   // Delete component
-  async deleteComponent(id: string): Promise<boolean> {
+  async deleteComponent(id: string, token: string): Promise<boolean> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       const index = mockComponents.findIndex((comp) => comp.id === id);
@@ -317,7 +335,10 @@ export const dataService = {
     try {
       const response = await fetch(`${baseUrl}/component/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
