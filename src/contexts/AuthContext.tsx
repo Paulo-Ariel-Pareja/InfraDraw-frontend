@@ -2,8 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 import { User } from "@/types";
 
 const baseUrl = import.meta.env.VITE_API_URL;
-const superUser = import.meta.env.VITE_USER_ADMIN;
-const superPass = import.meta.env.VITE_USER_PASSWORD;
 
 interface AuthContextType {
   user: User | null;
@@ -29,7 +27,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simular carga inicial del usuario desde localStorage
     const savedUser = localStorage.getItem("user");
     if (savedUser) {
       setUser(JSON.parse(savedUser));
@@ -42,17 +39,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     password: string
   ): Promise<boolean> => {
     setIsLoading(true);
-    if (username === superUser && password === superPass) {
-      const userData = {
-        id: "1",
-        username: "super admin",
-        email: "info@paulopareja.com.ar",
-      };
-      setUser(userData);
-      localStorage.setItem("user", JSON.stringify(userData));
-      setIsLoading(false);
-      return true;
-    }
     try {
       const response = await fetch(`${baseUrl}/user/login`, {
         method: "POST",
@@ -69,7 +55,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const userData = {
         id: data.id,
         username: data.username,
-        email: "info@paulopareja.com.ar",
+        token: data.access_token,
       };
       setUser(userData);
       localStorage.setItem("user", JSON.stringify(userData));

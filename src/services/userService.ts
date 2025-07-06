@@ -70,7 +70,10 @@ export interface UsersParams {
 }
 
 export const userService = {
-  async getAllUsers(params: UsersParams = {}): Promise<UsersResponse> {
+  async getAllUsers(
+    params: UsersParams = {},
+    token: string
+  ): Promise<UsersResponse> {
     const { page = 1, limit = 10, search = "" } = params;
 
     if (useMock) {
@@ -109,7 +112,10 @@ export const userService = {
 
       const response = await fetch(`${baseUrl}/user?${queryParams}`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -123,7 +129,8 @@ export const userService = {
   },
 
   async createUser(
-    userData: Omit<UserManagement, "id" | "createdAt" | "updatedAt">
+    userData: Omit<UserManagement, "id" | "createdAt" | "updatedAt">,
+    token: string
   ): Promise<UserManagement> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
@@ -143,7 +150,10 @@ export const userService = {
       const response = await fetch(`${baseUrl}/user`, {
         method: "POST",
         body: JSON.stringify(userData),
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -156,7 +166,7 @@ export const userService = {
     }
   },
 
-  async deleteUser(id: string): Promise<boolean> {
+  async deleteUser(id: string, token: string): Promise<boolean> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       const index = mockUsers.findIndex((user) => user.id === id);
@@ -168,7 +178,10 @@ export const userService = {
     try {
       const response = await fetch(`${baseUrl}/user/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);

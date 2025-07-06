@@ -1,9 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Board } from '@/types';
+import { useAuth } from "@/contexts/AuthContext";
 import { boardService, BoardsParams } from '@/services/boardService';
 
 export const useBoards = (params: BoardsParams = {}) => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
   const {
     data,
@@ -12,11 +14,12 @@ export const useBoards = (params: BoardsParams = {}) => {
     refetch
   } = useQuery({
     queryKey: ['boards', params],
-    queryFn: () => boardService.getAllBoards(params),
+    queryFn: () => boardService.getAllBoards(params, user.token),
   });
 
   const createBoardMutation = useMutation({
-    mutationFn: boardService.createBoard,
+    mutationFn: (boardData: Omit<Board, "id" | "createdAt" | "updatedAt">) =>
+      boardService.createBoard(boardData, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boards'] });
     },
@@ -24,21 +27,21 @@ export const useBoards = (params: BoardsParams = {}) => {
 
   const updateBoardMutation = useMutation({
     mutationFn: ({ id, updates }: { id: string; updates: Partial<Board> }) =>
-      boardService.updateBoard(id, updates),
+      boardService.updateBoard(id, updates, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boards'] });
     },
   });
 
   const deleteBoardMutation = useMutation({
-    mutationFn: boardService.deleteBoard,
+    mutationFn: (id: string) => boardService.deleteBoard(id, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boards'] });
     },
   });
 
   const toggleVisibilityMutation = useMutation({
-    mutationFn: boardService.toggleBoardVisibility,
+    mutationFn: (id: string) => boardService.toggleBoardVisibility(id, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['boards'] });
       queryClient.invalidateQueries({ queryKey: ['publicBoards'] });

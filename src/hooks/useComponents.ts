@@ -1,39 +1,43 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { Component } from '@/types';
-import { dataService, ComponentsParams } from '@/services/dataService';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Component } from "@/types";
+import { dataService, ComponentsParams } from "@/services/dataService";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const useComponents = (params: ComponentsParams = {}) => {
   const queryClient = useQueryClient();
+  const { user } = useAuth();
 
-  const {
-    data,
-    isLoading,
-    error,
-    refetch
-  } = useQuery({
-    queryKey: ['components', params],
-    queryFn: () => dataService.getComponents(params),
+  const { data, isLoading, error, refetch } = useQuery({
+    queryKey: ["components", params],
+    queryFn: () => dataService.getComponents(params, user.token),
   });
 
   const createComponentMutation = useMutation({
-    mutationFn: dataService.createComponent,
+    mutationFn: (
+      componentData: Omit<Component, "id" | "createdAt" | "updatedAt">
+    ) => dataService.createComponent(componentData, user.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['components'] });
+      queryClient.invalidateQueries({ queryKey: ["components"] });
     },
   });
 
   const updateComponentMutation = useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Partial<Component> }) =>
-      dataService.updateComponent(id, updates),
+    mutationFn: ({
+      id,
+      updates,
+    }: {
+      id: string;
+      updates: Partial<Component>;
+    }) => dataService.updateComponent(id, updates, user.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['components'] });
+      queryClient.invalidateQueries({ queryKey: ["components"] });
     },
   });
 
   const deleteComponentMutation = useMutation({
-    mutationFn: dataService.deleteComponent,
+    mutationFn: (id: string) => dataService.deleteComponent(id, user.token),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['components'] });
+      queryClient.invalidateQueries({ queryKey: ["components"] });
     },
   });
 
@@ -55,37 +59,39 @@ export const useComponents = (params: ComponentsParams = {}) => {
   };
 };
 
-export const useComponentsForEditor = (search: string = '') => {
+export const useComponentsForEditor = (search: string = "") => {
+  const { user } = useAuth();
   const {
     data: components = [],
     isLoading,
-    error
+    error,
   } = useQuery({
-    queryKey: ['components-editor', search],
-    queryFn: () => dataService.getComponentsForEditor(search),
+    queryKey: ["components-editor", search],
+    queryFn: () => dataService.getComponentsForEditor(search, user.token),
   });
 
   return {
     components,
     isLoading,
-    error
+    error,
   };
 };
 
 export const useComponent = (id: string) => {
+  const { user } = useAuth();
   const {
     data: component,
     isLoading,
-    error
+    error,
   } = useQuery({
-    queryKey: ['component', id],
-    queryFn: () => dataService.getComponentById(id),
+    queryKey: ["component", id],
+    queryFn: () => dataService.getComponentById(id, user.token),
     enabled: !!id,
   });
 
   return {
     component,
     isLoading,
-    error
+    error,
   };
 };

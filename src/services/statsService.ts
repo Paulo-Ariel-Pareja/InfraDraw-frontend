@@ -15,7 +15,7 @@ export interface ActivityStats {
 }
 
 export const statsService = {
-  async getRecentBoards(): Promise<RecentBoard[]> {
+  async getRecentBoards(token: string): Promise<RecentBoard[]> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       return [
@@ -39,7 +39,10 @@ export const statsService = {
     try {
       const response = await fetch(`${baseUrl}/board/recent`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
@@ -52,7 +55,7 @@ export const statsService = {
     }
   },
 
-  async getActivityStats(): Promise<ActivityStats[]> {
+  async getActivityStats(token: string): Promise<ActivityStats[]> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       return [
@@ -68,7 +71,10 @@ export const statsService = {
     try {
       const response = await fetch(`${baseUrl}/stats`, {
         method: "GET",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
       });
       if (!response.ok) {
         throw new Error(`API error: ${response.status}`);
