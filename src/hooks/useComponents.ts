@@ -1,15 +1,27 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Component } from "@/types";
 import { dataService, ComponentsParams } from "@/services/dataService";
 import { useAuth } from "@/contexts/AuthContext";
 
 export const useComponents = (params: ComponentsParams = {}) => {
   const queryClient = useQueryClient();
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["components", params],
-    queryFn: () => dataService.getComponents(params, user.token),
+    queryFn: async () => {
+      try {
+        return await dataService.getComponents(params, user.token);
+      } catch (err: any) {
+        if (err.message === "401" || err.message === "403") {
+          logout();
+          navigate("/");
+        }
+        throw err;
+      }
+    },
   });
 
   const createComponentMutation = useMutation({
@@ -18,6 +30,12 @@ export const useComponents = (params: ComponentsParams = {}) => {
     ) => dataService.createComponent(componentData, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["components"] });
+    },
+    onError: (error) => {
+      if (error.message === "401" || error.message === "403") {
+        logout();
+        navigate("/");
+      }
     },
   });
 
@@ -32,12 +50,24 @@ export const useComponents = (params: ComponentsParams = {}) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["components"] });
     },
+    onError: (error) => {
+      if (error.message === "401" || error.message === "403") {
+        logout();
+        navigate("/");
+      }
+    },
   });
 
   const deleteComponentMutation = useMutation({
     mutationFn: (id: string) => dataService.deleteComponent(id, user.token),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["components"] });
+    },
+    onError: (error) => {
+      if (error.message === "401" || error.message === "403") {
+        logout();
+        navigate("/");
+      }
     },
   });
 
@@ -60,14 +90,25 @@ export const useComponents = (params: ComponentsParams = {}) => {
 };
 
 export const useComponentsForEditor = (search: string = "") => {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const {
     data: components = [],
     isLoading,
     error,
   } = useQuery({
     queryKey: ["components-editor", search],
-    queryFn: () => dataService.getComponentsForEditor(search, user.token),
+    queryFn: async () => {
+      try {
+        return await dataService.getComponentsForEditor(search, user.token);
+      } catch (err: any) {
+        if (err.message === "401" || err.message === "403") {
+          logout();
+          navigate("/");
+        }
+        throw err;
+      }
+    },
   });
 
   return {
@@ -78,14 +119,25 @@ export const useComponentsForEditor = (search: string = "") => {
 };
 
 export const useComponent = (id: string) => {
-  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const {
     data: component,
     isLoading,
     error,
   } = useQuery({
     queryKey: ["component", id],
-    queryFn: () => dataService.getComponentById(id, user.token),
+    queryFn: async () => {
+      try {
+        return await dataService.getComponentById(id, user.token);
+      } catch (err: any) {
+        if (err.message === "401" || err.message === "403") {
+          logout();
+          navigate("/");
+        }
+        throw err;
+      }
+    },
     enabled: !!id,
   });
 

@@ -156,7 +156,6 @@ export interface ComponentsParams {
 }
 
 export const dataService = {
-  // Get components with pagination and search
   async getComponents(
     params: ComponentsParams = {},
     token: string
@@ -192,63 +191,56 @@ export const dataService = {
         totalPages,
       };
     }
+    const queryParams = new URLSearchParams();
+    queryParams.append("page", page.toString());
+    queryParams.append("limit", limit.toString());
+    if (search) queryParams.append("search", search);
 
-    try {
-      const queryParams = new URLSearchParams();
-      queryParams.append("page", page.toString());
-      queryParams.append("limit", limit.toString());
-      if (search) queryParams.append("search", search);
-
-      const response = await fetch(`${baseUrl}/component?${queryParams}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching components:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/component?${queryParams}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   // Get components for editor (first page only, no pagination UI)
-  async getComponentsForEditor(search: string = "", token: string): Promise<Component[]> {
-    const response = await this.getComponents({ page: 1, limit: 10, search }, token);
+  async getComponentsForEditor(
+    search: string = "",
+    token: string
+  ): Promise<Component[]> {
+    const response = await this.getComponents(
+      { page: 1, limit: 10, search },
+      token
+    );
     return response.components;
   },
 
-  // Get component by ID
   async getComponentById(id: string, token: string): Promise<Component | null> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       return mockComponents.find((comp) => comp.id === id) || null;
     }
-    try {
-      const response = await fetch(`${baseUrl}/component/${id}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching component:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/component/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
-  // Create new component
   async createComponent(
     componentData: Omit<Component, "id" | "createdAt" | "updatedAt">,
     token: string
@@ -264,27 +256,21 @@ export const dataService = {
       mockComponents.push(newComponent);
       return newComponent;
     }
-    try {
-      const response = await fetch(`${baseUrl}/component`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(componentData),
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error creating component:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/component`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(componentData),
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
-  // Update component
   async updateComponent(
     id: string,
     updates: Partial<Component>,
@@ -302,27 +288,21 @@ export const dataService = {
       };
       return mockComponents[index];
     }
-    try {
-      const response = await fetch(`${baseUrl}/component/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(updates),
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error updating component:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/component/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updates),
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
-  // Delete component
   async deleteComponent(id: string, token: string): Promise<boolean> {
     if (useMock) {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
@@ -332,21 +312,16 @@ export const dataService = {
       mockComponents.splice(index, 1);
       return true;
     }
-    try {
-      const response = await fetch(`${baseUrl}/component/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      return true;
-    } catch (error) {
-      console.error("Error deleting component:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/component/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    return true;
   },
 };

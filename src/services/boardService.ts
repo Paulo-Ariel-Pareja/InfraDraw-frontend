@@ -181,29 +181,23 @@ export const boardService = {
         totalPages,
       };
     }
+    const queryParams = new URLSearchParams();
+    queryParams.append("page", page.toString());
+    queryParams.append("limit", limit.toString());
+    if (search) queryParams.append("search", search);
 
-    try {
-      const queryParams = new URLSearchParams();
-      queryParams.append("page", page.toString());
-      queryParams.append("limit", limit.toString());
-      if (search) queryParams.append("search", search);
-
-      const response = await fetch(`${baseUrl}/board?${queryParams}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching boards:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board?${queryParams}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async getPublicBoards(params: BoardsParams = {}): Promise<BoardsResponse> {
@@ -242,26 +236,20 @@ export const boardService = {
         totalPages,
       };
     }
+    const queryParams = new URLSearchParams();
+    queryParams.append("page", page.toString());
+    queryParams.append("limit", limit.toString());
+    if (search) queryParams.append("search", search);
 
-    try {
-      const queryParams = new URLSearchParams();
-      queryParams.append("page", page.toString());
-      queryParams.append("limit", limit.toString());
-      if (search) queryParams.append("search", search);
-
-      const response = await fetch(`${baseUrl}/board/public?${queryParams}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching public boards:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board/public?${queryParams}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async getBoardById(id: string): Promise<Board | null> {
@@ -269,20 +257,15 @@ export const boardService = {
       await new Promise((resolve) => setTimeout(resolve, API_DELAY));
       return mockBoards.find((board) => board.id === id) || null;
     }
-    try {
-      const response = await fetch(`${baseUrl}/board/${id}`, {
-        method: "GET",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching board:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board/${id}`, {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async createBoard(
@@ -301,24 +284,19 @@ export const boardService = {
       console.log("Board created:", newBoard);
       return newBoard;
     }
-    try {
-      const response = await fetch(`${baseUrl}/board`, {
-        method: "POST",
-        body: JSON.stringify(boardData),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error creating board:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board`, {
+      method: "POST",
+      body: JSON.stringify(boardData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async updateBoard(
@@ -339,24 +317,19 @@ export const boardService = {
       console.log("Board updated:", mockBoards[index]);
       return mockBoards[index];
     }
-    try {
-      const response = await fetch(`${baseUrl}/board/${id}`, {
-        method: "PATCH",
-        body: JSON.stringify(updates),
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error updating board:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(updates),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async deleteBoard(id: string, token: string): Promise<boolean> {
@@ -368,22 +341,17 @@ export const boardService = {
       mockBoards.splice(index, 1);
       return true;
     }
-    try {
-      const response = await fetch(`${baseUrl}/board/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      return true;
-    } catch (error) {
-      console.error("Error deleting board:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    return true;
   },
 
   async toggleBoardVisibility(
@@ -402,22 +370,17 @@ export const boardService = {
       };
       return mockBoards[index];
     }
-    try {
-      const response = await fetch(`${baseUrl}/board/${id}/toggle`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error toggling board visibility:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board/${id}/toggle`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 };

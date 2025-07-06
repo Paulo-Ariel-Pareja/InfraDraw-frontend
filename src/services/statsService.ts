@@ -36,23 +36,18 @@ export const statsService = {
         },
       ];
     }
-    try {
-      const response = await fetch(`${baseUrl}/board/recent`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching components:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/board/recent`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 
   async getActivityStats(token: string): Promise<ActivityStats[]> {
@@ -68,22 +63,17 @@ export const statsService = {
         { name: "Dom", tableros: 1, componentes: 1 },
       ];
     }
-    try {
-      const response = await fetch(`${baseUrl}/stats`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      if (!response.ok) {
-        throw new Error(`API error: ${response.status}`);
-      }
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error fetching components:", error);
-      throw error;
+    const response = await fetch(`${baseUrl}/stats`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(response.status.toString());
     }
+    const data = await response.json();
+    return data;
   },
 };

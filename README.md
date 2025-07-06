@@ -48,8 +48,11 @@ Una aplicación web moderna para crear, visualizar y editar diagramas de arquite
     VITE_USER_ADMIN=admin
     VITE_USER_PASSWORD=ESTEES
     ```
-
-4. **Accede a la app:**
+4. **Clona, configura y ejecuta el backend**
+   ```sh
+    https://github.com/Paulo-Ariel-Pareja/InfraDraw-backend
+    ```
+5. **Accede a la app:**
     ```sh
     Abre http://localhost:8080 en tu navegador.
     ```
