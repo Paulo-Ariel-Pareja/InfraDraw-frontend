@@ -1,9 +1,17 @@
-
-import React from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { LogOut, User, Home, Boxes, Presentation, FolderOpen, Globe } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
+import React from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import {
+  LogOut,
+  User,
+  Home,
+  Boxes,
+  Presentation,
+  FolderOpen,
+  Globe,
+  Users,
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,11 +22,12 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const location = useLocation();
 
   const navigation = [
-    { name: 'Inicio', href: '/', icon: Home },
-    { name: 'Componentes', href: '/components', icon: Boxes },
-    { name: 'Editor', href: '/editor', icon: Presentation },
-    { name: 'Mis Tableros', href: '/boards', icon: FolderOpen },
-    { name: 'Tableros Públicos', href: '/public', icon: Globe },
+    { name: "Inicio", href: "/", icon: Home },
+    { name: "Componentes", href: "/components", icon: Boxes },
+    { name: "Editor", href: "/editor", icon: Presentation },
+    { name: "Mis Tableros", href: "/boards", icon: FolderOpen },
+    { name: "Usuarios", href: "/users", icon: Users },
+    { name: "Tableros Públicos", href: "/public", icon: Globe },
   ];
 
   const isActive = (href: string) => location.pathname === href;
@@ -30,10 +39,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
-              <h1 className="text-xl font-bold text-primary">
-                InfraDraw
-              </h1>
-              
+              <h1 className="text-xl font-bold text-primary">InfraDraw</h1>
+
               {user && (
                 <nav className="hidden md:flex space-x-4">
                   {navigation.map((item) => {
@@ -44,8 +51,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         to={item.href}
                         className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                           isActive(item.href)
-                            ? 'bg-primary text-primary-foreground'
-                            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                            ? "bg-primary text-primary-foreground"
+                            : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                         }`}
                       >
                         <Icon className="w-4 h-4 mr-2" />

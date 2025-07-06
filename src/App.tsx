@@ -1,24 +1,26 @@
-
-import React from 'react';
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from '@/contexts/AuthContext';
-import Layout from '@/components/Layout';
-import LoginForm from '@/components/LoginForm';
-import Dashboard from '@/pages/Dashboard';
-import Components from '@/pages/Components';
-import Editor from '@/pages/Editor';
-import Boards from '@/pages/Boards';
-import PublicBoards from '@/pages/PublicBoards';
-import NotFound from '@/pages/NotFound';
-import PublicDiagram from './pages/PublicDiagram';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider, useAuth } from "@/contexts/AuthContext";
+import Layout from "@/components/Layout";
+import LoginForm from "@/components/LoginForm";
+import Dashboard from "@/pages/Dashboard";
+import Components from "@/pages/Components";
+import Editor from "@/pages/Editor";
+import Boards from "@/pages/Boards";
+import PublicBoards from "@/pages/PublicBoards";
+import NotFound from "@/pages/NotFound";
+import PublicDiagram from "@/pages/PublicDiagram";
+import Users from "@/pages/Users";
 
 const queryClient = new QueryClient();
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const { user, isLoading } = useAuth();
 
   if (isLoading) {
@@ -39,36 +41,62 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/" element={
-        <ProtectedRoute>
-          <Dashboard />
-        </ProtectedRoute>
-      } />
-      <Route path="/components" element={
-        <ProtectedRoute>
-          <Components />
-        </ProtectedRoute>
-      } />
-      <Route path="/editor" element={
-        <ProtectedRoute>
-          <Editor />
-        </ProtectedRoute>
-      } />
-      <Route path="/editor/:id" element={
-        <ProtectedRoute>
-          <Editor />
-        </ProtectedRoute>
-      } />
-      <Route path="/boards" element={
-        <ProtectedRoute>
-          <Boards />
-        </ProtectedRoute>
-      } />
-      <Route path="/public" element={
-        <ProtectedRoute>
-          <PublicBoards />
-        </ProtectedRoute>
-      } />
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/components"
+        element={
+          <ProtectedRoute>
+            <Components />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/editor"
+        element={
+          <ProtectedRoute>
+            <Editor />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/editor/:id"
+        element={
+          <ProtectedRoute>
+            <Editor />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/boards"
+        element={
+          <ProtectedRoute>
+            <Boards />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/public"
+        element={
+          <ProtectedRoute>
+            <PublicBoards />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/users"
+        element={
+          <ProtectedRoute>
+            <Users />
+          </ProtectedRoute>
+        }
+      />
       <Route path="/public-diagram/:id" element={<PublicDiagram />} />
 
       <Route path="*" element={<NotFound />} />
