@@ -4,6 +4,14 @@ export interface User {
   email: string;
 }
 
+export interface UserManagement {
+  id: string;
+  username: string;
+  password?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Component {
   id: string;
   name: string;
@@ -15,14 +23,14 @@ export interface Component {
 
 export interface Endpoint {
   id: string;
-  method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   url: string;
   description?: string;
 }
 
 export interface DiagramNode {
   id: string;
-  type: 'component' | 'textBox' | 'zone';
+  type: "component" | "textBox" | "zone";
   position: { x: number; y: number };
   data: {
     label: string;
@@ -39,7 +47,12 @@ export interface DiagramEdge {
   targetHandle?: string;
   type?: string;
   data?: {
-    relationshipType?: 'api_call' | 'data_flow' | 'dependency' | 'event' | 'authentication';
+    relationshipType?:
+      | "api_call"
+      | "data_flow"
+      | "dependency"
+      | "event"
+      | "authentication";
     endpointId?: string;
     label?: string;
     description?: string;
