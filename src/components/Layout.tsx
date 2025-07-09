@@ -10,6 +10,9 @@ import {
   FolderOpen,
   Globe,
   Users,
+  GitBranch,
+  GitBranchPlus,
+  FileDigit,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -24,10 +27,21 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const navigation = [
     { name: "Inicio", href: "/", icon: Home },
     { name: "Componentes", href: "/components", icon: Boxes },
-    { name: "Editor", href: "/editor", icon: Presentation },
+    { name: "Editor de Tableros", href: "/editor", icon: Presentation },
     { name: "Mis Tableros", href: "/boards", icon: FolderOpen },
-    { name: "Usuarios", href: "/users", icon: Users },
+    {
+      name: "Editor de Diagramas",
+      href: "/sequence-editor",
+      icon: GitBranchPlus,
+    },
+    {
+      name: "Mis Diagramas de Secuencia",
+      href: "/sequence-diagrams",
+      icon: FileDigit,
+    },
     { name: "Tableros Públicos", href: "/public", icon: Globe },
+    { name: "Diagramas Públicos", href: "/public-sequences", icon: GitBranch },
+    { name: "Usuarios", href: "/users", icon: Users },
   ];
 
   const isActive = (href: string) => location.pathname === href;
@@ -36,7 +50,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
               <h1 className="text-xl font-bold text-primary">InfraDraw</h1>

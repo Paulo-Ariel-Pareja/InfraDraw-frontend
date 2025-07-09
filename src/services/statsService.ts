@@ -10,6 +10,7 @@ export interface RecentBoard {
 
 export interface ActivityStats {
   name: string;
+  diagramas: number;
   tableros: number;
   componentes: number;
 }

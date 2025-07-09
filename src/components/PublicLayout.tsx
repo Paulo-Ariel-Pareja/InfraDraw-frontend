@@ -1,8 +1,21 @@
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { LogOut, User, Home, Boxes, Presentation, FolderOpen, Globe, Users, LogIn } from 'lucide-react';
-import { Link, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import {
+  LogOut,
+  User,
+  Home,
+  Boxes,
+  Presentation,
+  FolderOpen,
+  Globe,
+  Users,
+  LogIn,
+  GitBranch,
+  GitBranchPlus,
+  FileDigit,
+} from "lucide-react";
+import { Link, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface PublicLayoutProps {
   children: React.ReactNode;
@@ -13,16 +26,28 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
   const location = useLocation();
 
   const publicNavigation = [
-    { name: 'Tableros Públicos', href: '/public', icon: Globe },
+    { name: "Tableros Públicos", href: "/public", icon: Globe },
+    { name: "Diagramas Públicos", href: "/public-sequences", icon: GitBranch },
   ];
 
   const authenticatedNavigation = [
-    { name: 'Inicio', href: '/', icon: Home },
-    { name: 'Componentes', href: '/components', icon: Boxes },
-    { name: 'Editor', href: '/editor', icon: Presentation },
-    { name: 'Mis Tableros', href: '/boards', icon: FolderOpen },
-    { name: 'Usuarios', href: '/users', icon: Users },
-    { name: 'Tableros Públicos', href: '/public', icon: Globe },
+    { name: "Inicio", href: "/", icon: Home },
+    { name: "Componentes", href: "/components", icon: Boxes },
+    { name: "Editor de Tableros", href: "/editor", icon: Presentation },
+    { name: "Mis Tableros", href: "/boards", icon: FolderOpen },
+    {
+      name: "Editor de Diagramas",
+      href: "/sequence-editor",
+      icon: GitBranchPlus,
+    },
+    {
+      name: "Mis Diagramas de Secuencia",
+      href: "/sequence-diagrams",
+      icon: FileDigit,
+    },
+    { name: "Tableros Públicos", href: "/public", icon: Globe },
+    { name: "Diagramas Públicos", href: "/public-sequences", icon: GitBranch },
+    { name: "Usuarios", href: "/users", icon: Users },
   ];
 
   const navigation = user ? authenticatedNavigation : publicNavigation;
@@ -32,7 +57,7 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center space-x-8">
               <Link to={user ? "/" : "/public"}>
@@ -40,7 +65,7 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
                   InfraDraw
                 </h1>
               </Link>
-              
+
               <nav className="hidden md:flex space-x-4">
                 {navigation.map((item) => {
                   const Icon = item.icon;
@@ -50,8 +75,8 @@ const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
                       to={item.href}
                       className={`flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                         isActive(item.href)
-                          ? 'bg-primary text-primary-foreground'
-                          : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                          ? "bg-primary text-primary-foreground"
+                          : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
                       }`}
                     >
                       <Icon className="w-4 h-4 mr-2" />

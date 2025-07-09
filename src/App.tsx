@@ -6,16 +6,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Layout from "@/components/Layout";
-import PublicLayout from '@/components/PublicLayout';
+import PublicLayout from "@/components/PublicLayout";
 import LoginForm from "@/components/LoginForm";
 import Dashboard from "@/pages/Dashboard";
 import Components from "@/pages/Components";
 import Editor from "@/pages/Editor";
 import Boards from "@/pages/Boards";
 import PublicBoards from "@/pages/PublicBoards";
-import NotFound from "@/pages/NotFound";
-import PublicDiagram from "@/pages/PublicDiagram";
+import PublicSequenceDiagrams from "@/pages/PublicSequenceDiagrams";
+import PublicSequenceDiagram from "@/pages/PublicSequenceDiagram";
 import Users from "@/pages/Users";
+import SequenceDiagrams from "@/pages/SequenceDiagrams";
+import SequenceEditor from "@/pages/SequenceEditor";
+import NotFound from "@/pages/NotFound";
+import PublicDiagram from "./pages/PublicDiagram";
 
 const queryClient = new QueryClient();
 
@@ -82,12 +86,6 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
-      {/* Ruta pública para tableros públicos */}
-      <Route path="/public" element={
-        <PublicLayout>
-          <PublicBoards />
-        </PublicLayout>
-      } />
       <Route
         path="/users"
         element={
@@ -96,7 +94,53 @@ const AppRoutes: React.FC = () => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/sequence-diagrams"
+        element={
+          <ProtectedRoute>
+            <SequenceDiagrams />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sequence-editor"
+        element={
+          <ProtectedRoute>
+            <SequenceEditor />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/sequence-editor/:id"
+        element={
+          <ProtectedRoute>
+            <SequenceEditor />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Ruta pública para tableros públicos */}
+      <Route
+        path="/public"
+        element={
+          <PublicLayout>
+            <PublicBoards />
+          </PublicLayout>
+        }
+      />
+
+      {/* Ruta pública para diagramas de secuencia públicos */}
+      <Route
+        path="/public-sequences"
+        element={
+          <PublicLayout>
+            <PublicSequenceDiagrams />
+          </PublicLayout>
+        }
+      />
+
       <Route path="/public-diagram/:id" element={<PublicDiagram />} />
+      <Route path="/public-sequence/:id" element={<PublicSequenceDiagram />} />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

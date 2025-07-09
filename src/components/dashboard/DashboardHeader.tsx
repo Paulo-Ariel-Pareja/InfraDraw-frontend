@@ -1,8 +1,7 @@
-
-import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Plus, Boxes } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import React from "react";
+import { Button } from "@/components/ui/button";
+import { Plus, Boxes } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const DashboardHeader: React.FC = () => {
   return (
@@ -11,9 +10,10 @@ const DashboardHeader: React.FC = () => {
         Bienvenido a InfraDraw
       </h1>
       <p className="text-xl text-muted-foreground">
-        Crea, gestiona y comparte diagramas de arquitectura de software de manera profesional, pero simple
+        Crea, gestiona y comparte diagramas de arquitectura de software o de
+        sequencia de manera profesional, pero simple.
       </p>
-      
+
       <div className="flex justify-center gap-4 pt-4">
         <Link to="/editor">
           <Button size="lg">

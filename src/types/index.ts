@@ -72,3 +72,14 @@ export interface Board {
   updatedAt: string;
   createdBy: string;
 }
+
+export interface SequenceDiagram {
+  id: string;
+  name: string;
+  description?: string;
+  mermaidCode: string;
+  isPublic: boolean;
+  createdAt: string;
+  updatedAt: string;
+  createdBy: string;
+}
