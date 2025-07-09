@@ -234,7 +234,6 @@ export const sequenceDiagramService = {
         updatedAt: new Date().toISOString(),
       };
       mockSequenceDiagrams.push(newDiagram);
-      console.log("Sequence diagram created:", newDiagram);
       return newDiagram;
     }
 
@@ -270,7 +269,6 @@ export const sequenceDiagramService = {
         ...updates,
         updatedAt: new Date().toISOString(),
       };
-      console.log("Sequence diagram updated:", mockSequenceDiagrams[index]);
       return mockSequenceDiagrams[index];
     }
 
@@ -343,7 +341,6 @@ export const sequenceDiagramService = {
       throw new Error(response.status.toString());
     }
     const data = await response.json();
-    console.log(data);
     return data;
   },
 };

@@ -49,7 +49,6 @@ const MermaidRenderer: React.FC<MermaidRendererProps> = ({
       const { svg } = await mermaid.render(id, code);
       mermaidRef.current.innerHTML = svg;
     } catch (err) {
-      console.error("Mermaid rendering error:", err);
       setError(
         "Error al renderizar el diagrama. Verifica la sintaxis de Mermaid."
       );

@@ -137,7 +137,6 @@ export const userService = {
       };
       const { password, ...userResponse } = newUser;
       mockUsers.push(userResponse);
-      console.log("User created:", userResponse);
       return userResponse;
     }
     const response = await fetch(`${baseUrl}/user`, {

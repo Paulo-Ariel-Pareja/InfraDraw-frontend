@@ -43,16 +43,6 @@ const PublicDiagram: React.FC = () => {
         data: edge.data,
       }));
 
-      console.log("Loading board data with handles:", {
-        nodes: convertedNodes,
-        edges: convertedEdges,
-        edgeHandles: convertedEdges.map((e) => ({
-          id: e.id,
-          sourceHandle: e.sourceHandle,
-          targetHandle: e.targetHandle,
-        })),
-      });
-
       setInitialNodes(convertedNodes);
       setInitialEdges(convertedEdges);
     }
