@@ -281,7 +281,6 @@ export const boardService = {
         updatedAt: new Date().toISOString(),
       };
       mockBoards.push(newBoard);
-      console.log("Board created:", newBoard);
       return newBoard;
     }
     const response = await fetch(`${baseUrl}/board`, {
@@ -314,7 +313,6 @@ export const boardService = {
         ...updates,
         updatedAt: new Date().toISOString(),
       };
-      console.log("Board updated:", mockBoards[index]);
       return mockBoards[index];
     }
     const response = await fetch(`${baseUrl}/board/${id}`, {

@@ -47,13 +47,6 @@ const DiagramCanvas: React.FC<DiagramCanvasProps> = ({
     }, {} as EdgeTypes);
   }, [edgeTypes, onEdgeConfig]);
 
-  console.log('DiagramCanvas render:', { 
-    nodes: nodes.length, 
-    edges: edges.length,
-    edgeTypes: Object.keys(enhancedEdgeTypes),
-    edgesData: edges.map(e => ({ id: e.id, type: e.type, data: e.data }))
-  });
-
   return (
     <div className="flex-1 border rounded-lg bg-white">
       <ReactFlow

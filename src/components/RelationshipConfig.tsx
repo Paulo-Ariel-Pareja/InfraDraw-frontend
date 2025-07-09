@@ -1,13 +1,23 @@
-
-import React, { useState, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Edge } from '@xyflow/react';
-import { Component, Endpoint } from '@/types';
+import React, { useState, useEffect } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Edge } from "@xyflow/react";
+import { Component, Endpoint } from "@/types";
 
 interface RelationshipConfigProps {
   isOpen: boolean;
@@ -19,11 +29,11 @@ interface RelationshipConfigProps {
 }
 
 const relationshipTypes = [
-  { value: 'api_call', label: 'Llamada API' },
-  { value: 'data_flow', label: 'Flujo de Datos' },
-  { value: 'dependency', label: 'Dependencia' },
-  { value: 'event', label: 'Evento' },
-  { value: 'authentication', label: 'Autenticación' },
+  { value: "api_call", label: "Llamada API" },
+  { value: "data_flow", label: "Flujo de Datos" },
+  { value: "dependency", label: "Dependencia" },
+  { value: "event", label: "Evento" },
+  { value: "authentication", label: "Autenticación" },
 ];
 
 const RelationshipConfig: React.FC<RelationshipConfigProps> = ({
@@ -32,34 +42,30 @@ const RelationshipConfig: React.FC<RelationshipConfigProps> = ({
   onSave,
   sourceComponent,
   targetComponent,
-  existingEdge
+  existingEdge,
 }) => {
-  const [relationshipType, setRelationshipType] = useState('');
-  const [selectedEndpoint, setSelectedEndpoint] = useState('');
-  const [description, setDescription] = useState('');
-  const [label, setLabel] = useState('');
+  const [relationshipType, setRelationshipType] = useState("");
+  const [selectedEndpoint, setSelectedEndpoint] = useState("");
+  const [description, setDescription] = useState("");
+  const [label, setLabel] = useState("");
 
   // Reset form when dialog opens or when components change
   useEffect(() => {
     if (isOpen) {
-      console.log('RelationshipConfig: Resetting form state', {
-        existingEdge: existingEdge?.id,
-        sourceComponent: sourceComponent?.name,
-        targetComponent: targetComponent?.name
-      });
-      
       if (existingEdge) {
         // Editing existing edge - load existing data
-        setRelationshipType((existingEdge.data?.relationshipType as string) || '');
-        setSelectedEndpoint((existingEdge.data?.endpointId as string) || '');
-        setDescription((existingEdge.data?.description as string) || '');
-        setLabel((existingEdge.data?.label as string) || '');
+        setRelationshipType(
+          (existingEdge.data?.relationshipType as string) || ""
+        );
+        setSelectedEndpoint((existingEdge.data?.endpointId as string) || "");
+        setDescription((existingEdge.data?.description as string) || "");
+        setLabel((existingEdge.data?.label as string) || "");
       } else {
         // Creating new edge - reset all fields
-        setRelationshipType('');
-        setSelectedEndpoint('');
-        setDescription('');
-        setLabel('');
+        setRelationshipType("");
+        setSelectedEndpoint("");
+        setDescription("");
+        setLabel("");
       }
     }
   }, [isOpen, existingEdge]);
@@ -70,41 +76,52 @@ const RelationshipConfig: React.FC<RelationshipConfigProps> = ({
       relationshipType,
       endpointId: selectedEndpoint,
       description,
-      label: label || `${relationshipTypes.find(t => t.value === relationshipType)?.label || 'Relación'}`,
+      label:
+        label ||
+        `${
+          relationshipTypes.find((t) => t.value === relationshipType)?.label ||
+          "Relación"
+        }`,
       // Preservar los nombres de componentes originales si es una edición
-      sourceComponent: existingEdge ? (existingEdge.data?.sourceComponent as string) : sourceComponent?.name,
-      targetComponent: existingEdge ? (existingEdge.data?.targetComponent as string) : targetComponent?.name,
+      sourceComponent: existingEdge
+        ? (existingEdge.data?.sourceComponent as string)
+        : sourceComponent?.name,
+      targetComponent: existingEdge
+        ? (existingEdge.data?.targetComponent as string)
+        : targetComponent?.name,
     };
-    console.log('RelationshipConfig: Saving edge data', edgeData);
+
     onSave(edgeData);
     onClose();
   };
 
   const handleClose = () => {
-    console.log('RelationshipConfig: Closing and resetting form');
+
     // Reset form when closing
-    setRelationshipType('');
-    setSelectedEndpoint('');
-    setDescription('');
-    setLabel('');
+    setRelationshipType("");
+    setSelectedEndpoint("");
+    setDescription("");
+    setLabel("");
     onClose();
   };
 
   // Para edición, usar el componente target de la relación existente, sino usar el de pendingConnection
-  const currentTargetComponent = existingEdge ? 
-    // Si estamos editando, necesitamos encontrar el componente por su nombre
-    (sourceComponent?.name === (existingEdge.data?.targetComponent as string) ? sourceComponent : targetComponent) :
-    targetComponent;
+  const currentTargetComponent = existingEdge
+    ? // Si estamos editando, necesitamos encontrar el componente por su nombre
+      sourceComponent?.name === (existingEdge.data?.targetComponent as string)
+      ? sourceComponent
+      : targetComponent
+    : targetComponent;
 
   const availableEndpoints = currentTargetComponent?.endpoints || [];
 
   // Para mostrar los nombres correctos de los componentes - usar siempre la info original
-  const displaySourceName = existingEdge ? 
-    (existingEdge.data?.sourceComponent as string) : 
-    (sourceComponent?.name || '');
-  const displayTargetName = existingEdge ? 
-    (existingEdge.data?.targetComponent as string) : 
-    (targetComponent?.name || '');
+  const displaySourceName = existingEdge
+    ? (existingEdge.data?.sourceComponent as string)
+    : sourceComponent?.name || "";
+  const displayTargetName = existingEdge
+    ? (existingEdge.data?.targetComponent as string)
+    : targetComponent?.name || "";
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
@@ -112,7 +129,7 @@ const RelationshipConfig: React.FC<RelationshipConfigProps> = ({
         <DialogHeader>
           <DialogTitle>Configurar Relación</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div className="text-sm text-gray-600">
             Desde: <span className="font-medium">{displaySourceName}</span>
@@ -122,7 +139,10 @@ const RelationshipConfig: React.FC<RelationshipConfigProps> = ({
 
           <div>
             <Label htmlFor="relationshipType">Tipo de Relación</Label>
-            <Select value={relationshipType} onValueChange={setRelationshipType}>
+            <Select
+              value={relationshipType}
+              onValueChange={setRelationshipType}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona el tipo de relación" />
               </SelectTrigger>
@@ -136,10 +156,13 @@ const RelationshipConfig: React.FC<RelationshipConfigProps> = ({
             </Select>
           </div>
 
-          {relationshipType === 'api_call' && availableEndpoints.length > 0 && (
+          {relationshipType === "api_call" && availableEndpoints.length > 0 && (
             <div>
               <Label htmlFor="endpoint">Endpoint</Label>
-              <Select value={selectedEndpoint} onValueChange={setSelectedEndpoint}>
+              <Select
+                value={selectedEndpoint}
+                onValueChange={setSelectedEndpoint}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Selecciona un endpoint" />
                 </SelectTrigger>
@@ -147,7 +170,8 @@ const RelationshipConfig: React.FC<RelationshipConfigProps> = ({
                   {availableEndpoints.map((endpoint) => (
                     <SelectItem key={endpoint.id} value={endpoint.id}>
                       <span className="font-mono text-sm">
-                        <span className="font-semibold">{endpoint.method}</span> {endpoint.url}
+                        <span className="font-semibold">{endpoint.method}</span>{" "}
+                        {endpoint.url}
                       </span>
                     </SelectItem>
                   ))}

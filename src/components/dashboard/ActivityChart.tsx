@@ -1,12 +1,19 @@
-
-import React from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { TrendingUp } from 'lucide-react';
-import { useActivityStats } from '@/hooks/useStats';
+import React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
+import { TrendingUp } from "lucide-react";
+import { useActivityStats } from "@/hooks/useStats";
 
 const ActivityChart: React.FC = () => {
-const { activityStats, isLoading } = useActivityStats();
+  const { activityStats } = useActivityStats();
 
   return (
     <Card>
@@ -16,7 +23,7 @@ const { activityStats, isLoading } = useActivityStats();
           Actividad Semanal
         </CardTitle>
       </CardHeader>
-      <CardContent> 
+      <CardContent>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={activityStats}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -25,6 +32,7 @@ const { activityStats, isLoading } = useActivityStats();
             <Tooltip />
             <Bar dataKey="tableros" name="Tableros" fill="#3b82f6" />
             <Bar dataKey="componentes" name="Componentes" fill="#8b5cf6" />
+            <Bar dataKey="diagramas" name="Diagramas Seq" fill="#abaaac" />
           </BarChart>
         </ResponsiveContainer>
       </CardContent>

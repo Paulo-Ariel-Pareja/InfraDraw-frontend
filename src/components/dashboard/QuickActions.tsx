@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Boxes, Globe, FolderOpen } from "lucide-react";
+import { Plus, Boxes, Globe, FolderOpen, GitBranch } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const QuickActions: React.FC = () => {
@@ -11,7 +11,7 @@ const QuickActions: React.FC = () => {
         <CardTitle>Acciones Rápidas</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
           <Link to="/editor">
             <Button
               variant="outline"
@@ -41,6 +41,23 @@ const QuickActions: React.FC = () => {
                 </div>
                 <div className="text-sm text-muted-foreground">
                   Agregar componente
+                </div>
+              </div>
+            </Button>
+          </Link>
+
+          <Link to="/sequence-editor">
+            <Button
+              variant="outline"
+              className="w-full justify-start h-auto p-4"
+            >
+              <div className="text-left">
+                <div className="flex items-center mb-2">
+                  <GitBranch className="w-5 h-5 mr-2" />
+                  Nuevo Diagrama de Secuencia
+                </div>
+                <div className="text-sm text-muted-foreground">
+                  Crear diagrama de secuencia
                 </div>
               </div>
             </Button>
