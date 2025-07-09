@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Loader2, Lock } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const superUser = import.meta.env.VITE_USER_ADMIN;
 const superPass = import.meta.env.VITE_USER_PASSWORD;
@@ -99,7 +100,15 @@ const LoginForm: React.FC = () => {
             </p>
           </div>
 
-          <div className="mt-4 p-3 bg-blue-50 rounded-md"></div>
+          <div className="mt-4 p-3 bg-blue-50 rounded-md">
+            <p className="text-xs text-blue-600">
+              <Link to="/public">
+                  <Button variant="outline" size="sm">
+                    Acceso a tableros publicos
+                  </Button>
+                </Link>
+            </p>
+          </div>
         </CardContent>
       </Card>
     </div>
