@@ -21,17 +21,37 @@ const Editor: React.FC = () => {
       setBoardName(board.name);
       setBoardDescription(board.description || "");
       // Convert DiagramNode[] to Node[] for ReactFlow compatibility
-      const convertedNodes: Node[] = board.nodes.map((node) => ({
-        id: node.id,
-        type: node.type,
-        position: node.position,
-        data: {
-          label: node.data.label,
-          component: node.data.component,
-          style: node.data.style,
-          ...node.data,
-        },
-      }));
+      const convertedNodes: Node[] = board.nodes.map((node) => {
+        if (node.type === "zone") {
+          return {
+            id: node.id,
+            type: node.type,
+            position: node.position,
+            data: {
+              label: node.data.label,
+              component: node.data.component,
+              style: node.data.style,
+              ...node.data,
+            },
+            style: { width: 150, height: 100 },
+            width: node.width,
+            height: node.height,
+            zIndex: -10
+          };
+        }
+
+        return {
+          id: node.id,
+          type: node.type,
+          position: node.position,
+          data: {
+            label: node.data.label,
+            component: node.data.component,
+            style: node.data.style,
+            ...node.data,
+          },
+        };
+      });
 
       // Convert DiagramEdge[] to Edge[] for ReactFlow compatibility - preservar handles
       const convertedEdges: Edge[] = board.edges.map((edge) => ({
@@ -66,6 +86,8 @@ const Editor: React.FC = () => {
         style: node.data?.style as Record<string, any> | undefined,
         ...node.data,
       },
+      width: node.width,
+      height: node.height,
     }));
 
     const diagramEdges = edges.map((edge) => ({
