@@ -37,6 +37,8 @@ export interface DiagramNode {
     component?: Component;
     style?: Record<string, any>;
   };
+  width?: number;
+  height?: number;
 }
 
 export interface DiagramEdge {
