@@ -14,6 +14,7 @@ Una aplicación web moderna para crear, visualizar y editar diagramas de arquite
 - **Notificaciones y toasts** personalizables.
 - **Estadísticas de uso** y tableros recientes.
 - **Integración con React Flow** para una experiencia fluida y potente.
+- **Editor en linea de JSON y visualización** para mejorar la comprension de los datos.
 - **Estilos modernos** con TailwindCSS y shadcn/ui.
 
 ---
