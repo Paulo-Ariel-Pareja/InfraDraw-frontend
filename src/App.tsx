@@ -18,6 +18,7 @@ import PublicSequenceDiagram from "@/pages/PublicSequenceDiagram";
 import Users from "@/pages/Users";
 import SequenceDiagrams from "@/pages/SequenceDiagrams";
 import SequenceEditor from "@/pages/SequenceEditor";
+import { JSONEditor } from "@/pages/JSONEditor";
 import NotFound from "@/pages/NotFound";
 import PublicDiagram from "./pages/PublicDiagram";
 
@@ -141,6 +142,14 @@ const AppRoutes: React.FC = () => {
 
       <Route path="/public-diagram/:id" element={<PublicDiagram />} />
       <Route path="/public-sequence/:id" element={<PublicSequenceDiagram />} />
+      <Route
+        path="/json-editor"
+        element={
+          <PublicLayout>
+            <JSONEditor />
+          </PublicLayout>
+        }
+      />
 
       <Route path="*" element={<NotFound />} />
     </Routes>

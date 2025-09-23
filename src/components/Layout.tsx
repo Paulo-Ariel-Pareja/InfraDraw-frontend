@@ -13,6 +13,7 @@ import {
   GitBranch,
   GitBranchPlus,
   FileDigit,
+  FileJson,
 } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -38,6 +39,11 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       name: "Mis Diagramas de Secuencia",
       href: "/sequence-diagrams",
       icon: FileDigit,
+    },
+    {
+      name: "Editor JSON",
+      href: "/json-editor",
+      icon: FileJson,
     },
     { name: "Tableros Públicos", href: "/public", icon: Globe },
     { name: "Diagramas Públicos", href: "/public-sequences", icon: GitBranch },
